@@ -32,4 +32,11 @@ def get_drinks():
 @app.route('/drinks/<id>')
 def get_drink(id):
     drink = Drink.query.get_or_404(id)
-    return jsonfy({"name":drink.name, "description":drink.description})
+    return {"name": drink.name, "description": drink.description}
+
+@app.route('/drinks', methods=['POST'])
+def add_drink():
+    drink = Drink(name=request.json['name'], description=request.json['description'])
+    db.session.add(drink)
+    db.session.commit()
+    return {'id': drink.id}
